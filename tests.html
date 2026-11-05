@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open Loan Calculator - Automated Tests</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f6fb;
+  color: #172b4d;
+  margin: 0;
+  padding: 25px;
+}
+.container {
+  max-width: 850px;
+  margin: auto;
+}
+.card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 3px 14px rgba(0,0,0,.05);
+}
+h1 {color: #174ea6;}
+.test {
+  padding: 15px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.status {
+  font-weight: bold;
+  margin-right: 8px;
+}
+.pass {color: #168653;}
+.fail {color: #b91c1c;}
+button {
+  background: #174ea6;
+  color: white;
+  border: 0;
+  padding: 12px 20px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.summary {
+  padding: 15px;
+  background: #eef4ff;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-weight: bold;
+}
+.note {color: #64748b;font-size: 13px;line-height: 1.6;}
+iframe {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  border: 0;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="card">
+
+<h1>Open Loan Calculator</h1>
+<h2>Automated Test Suite</h2>
+
+<p>This page checks the calculations performed by the actual loan calculator.</p>
+
+<div class="summary" id="summary">
+Preparing test environment...
+</div>
+
+<div id="results"></div>
+
+<p class="note" id="message">
+The tests run in your browser using the calculator application.
+</p>
+
+<button onclick="runTests()">Run Tests Again</button>
+
+<p class="note">
+These are browser-based functional tests. They do not replace independent
+financial validation or professional software testing.
+</p>
+
+</div>
+</div>
+
+<iframe id="calculator" src="./index.html"
+title="Loan calculator test environment"></iframe>
+
+<script>
+let testResults = [];
+
+function parseMoney(text) {
+  return Number(text.replace(/[₹,\s]/g, ""));
+}
+
+function assert(condition, description) {
+  testResults.push({
+    passed: Boolean(condition),
+    description: description
+  });
+}
+
+function runTests() {
+  testResults = [];
+
+  const frame = document.getElementById("calculator");
+  const app = frame.contentWindow;
+  const doc = frame.contentDocument;
+
+  try {
+    if (!app || !doc || typeof app.calculate !== "function") {
+      throw new Error("Calculator could not be loaded. Check index.html.");
+    }
+
+    const amount = doc.getElementById("amount");
+    const rate = doc.getElementById("rate");
+    const tenure = doc.getElementById("tenure");
+    const monthlyExtra = doc.getElementById("monthlyExtra");
+    const lumpSum = doc.getElementById("lumpSum");
+
+    function setInputs(p, r, n, extra, lump) {
+      amount.value = p;
+      rate.value = r;
+      tenure.value = n;
+      monthlyExtra.value = extra;
+      lumpSum.value = lump;
+      app.calculate();
+
+      const error = doc.getElementById("error").textContent;
+      if (error) throw new Error(error);
+    }
+
+    function output(id) {
+      return doc.getElementById(id).textContent;
+    }
+
+    // Test 1: Reducing balance EMI
+    setInputs(200000, 12, 36, 0, 0);
+    const emi = parseMoney(output("emi"));
+    assert(
+      Math.abs(emi - 6642.86) < 0.02,
+      "Reducing balance EMI is approximately ₹6,642.86."
+    );
+
+    // Test 2: Flat interest
+    const flat = parseMoney(output("flatInterest"));
+    assert(
+      Math.abs(flat - 72000) < 0.02,
+      "Flat interest is ₹72,000."
+    );
+
+    // Test 3: Zero interest
+    setInputs(12000, 0, 12, 0, 0);
+    const zeroEMI = parseMoney(output("emi"));
+    assert(
+      Math.abs(zeroEMI - 1000) < 0.02,
+      "Zero-interest loan EMI is ₹1,000."
+    );
+
+    // Test 4: Monthly additional payment
+    setInputs(200000, 12, 36, 1000, 0);
+    const monthlyTenure = parseInt(output("newTenure"), 10);
+    const monthlySaving = parseMoney(output("savedInterest"));
+    assert(
+      monthlyTenure < 36 && monthlySaving > 0,
+      "Monthly additional payment reduces tenure and interest."
+    );
+
+    // Test 5: Lump-sum prepayment
+    setInputs(200000, 12, 36, 0, 10000);
+    const lumpTenure = parseInt(output("newTenure"), 10);
+    const lumpSaving = parseMoney(output("savedInterest"));
+    assert(
+      lumpTenure < 36 && lumpSaving > 0,
+      "Lump-sum prepayment reduces tenure and interest."
+    );
+
+    // Test 6: Both prepayment methods
+    setInputs(200000, 12, 36, 1000, 10000);
+    const combinedTenure = parseInt(output("newTenure"), 10);
+    assert(
+      combinedTenure < monthlyTenure && combinedTenure < lumpTenure,
+      "Combining both prepayment methods reduces tenure further."
+    );
+
+    // Test 7: Final outstanding balance
+    const rows = doc.querySelectorAll("#schedule tr");
+    const lastRow = rows[rows.length - 1];
+    const cells = lastRow ? lastRow.querySelectorAll("td") : [];
+    const finalBalance = cells.length === 7
+      ? parseMoney(cells[6].textContent)
+      : NaN;
+
+    assert(
+      rows.length === combinedTenure &&
+      Number.isFinite(finalBalance) &&
+      Math.abs(finalBalance) < 0.02,
+      "Repayment schedule closes the loan balance to zero."
+    );
+
+    showResults();
+
+  } catch (error) {
+    testResults.push({
+      passed: false,
+      description: "Test setup error: " + error.message
+    });
+    showResults();
+  }
+}
+
+function showResults() {
+  const results = document.getElementById("results");
+  results.replaceChildren();
+
+  let passed = 0;
+  let failed = 0;
+
+  testResults.forEach((test, index) => {
+    if (test.passed) passed++;
+    else failed++;
+
+    const item = document.createElement("div");
+    item.className = "test";
+
+    const status = document.createElement("span");
+    status.className = "status " + (test.passed ? "pass" : "fail");
+    status.textContent = test.passed ? "PASS" : "FAIL";
+
+    const description = document.createElement("span");
+    description.textContent = (index + 1) + ". " + test.description;
+
+    item.append(status, description);
+    results.appendChild(item);
+  });
+
+  document.getElementById("summary").textContent =
+    passed + " tests passed | " + failed + " tests failed | " +
+    testResults.length + " total tests";
+
+  document.getElementById("message").textContent =
+    failed === 0
+      ? "All current automated checks passed. This does not establish full financial accuracy."
+      : "Some tests failed. Review the failures before releasing the application.";
+}
+
+const frame = document.getElementById("calculator");
+
+frame.addEventListener("load", () => {
+  runTests();
+});
+</script>
+
+</body>
+</html>
