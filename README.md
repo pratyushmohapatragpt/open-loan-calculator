@@ -1,50 +1,55 @@
+
 # Open Loan Calculator
 
-An open-source web application for calculating loan EMIs, comparing flat and reducing interest methods, and generating loan repayment schedules.
+An open-source web application designed to make loan calculations transparent and accessible.
 
-## Project Overview
+## Live Application
 
-Open Loan Calculator aims to make loan calculations easier, transparent and accessible to everyone.
+https://pratyushmohapatragpt.github.io/open-loan-calculator/
 
-The application will help users understand their monthly repayment obligations, total interest costs and overall loan repayment structure.
+## Features
 
-## Planned Features
-
-- EMI Calculator
-- Flat Interest vs Reducing Balance Comparison
-- Principal and Interest Breakdown
-- Month-wise Amortization Schedule
-- Total Interest and Total Repayment Calculation
-- Downloadable Repayment Report
-- Loan Prepayment Calculator (Future Enhancement)
-
-## Target Users
-
-- Individual borrowers
-- Students and researchers
-- Financial analysts
-- Banking and lending professionals
+- Reducing balance EMI calculator
+- Flat vs reducing interest comparison
+- Monthly additional payment calculation
+- One-time lump-sum prepayment
+- Interest savings estimation
+- Revised loan repayment tenure
+- Month-wise amortization schedule
+- CSV repayment schedule download
+- Print and PDF export
 
 ## Technology
 
-The application is planned as a browser-based web application.
+- HTML5
+- CSS3
+- JavaScript
+- GitHub Pages
 
-Technology choices and implementation details will be documented as development progresses.
+## Getting Started
+
+1. Open the live application.
+2. Enter the loan amount.
+3. Enter the annual interest rate.
+4. Enter the loan tenure in months.
+5. Add optional prepayment details.
+6. Click Calculate Loan.
+7. Review the results and repayment schedule.
 
 ## Project Status
 
-**Current status:** Initial repository setup.
-
-Development and testing are planned in phases.
-
-## Disclaimer
-
-This tool is intended for educational and informational purposes. Actual loan repayment amounts may vary depending on lender policies, fees, taxes and loan terms.
+Version 2.0 – Initial public release and ongoing development.
 
 ## Contributions
 
-Contributions, suggestions and feedback are welcome. Please raise an issue before proposing major changes.
+Suggestions, bug reports and improvements are welcome.
+
+Please use the GitHub Issues section to report bugs or suggest new features.
+
+## Disclaimer
+
+This tool provides illustrative financial calculations for educational purposes. Actual lender calculations may differ based on contractual terms, charges, taxes and repayment policies.
 
 ## Licence
 
-This project is licensed under the MIT Licence.
+MIT License.
