@@ -3,166 +3,249 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Open Loan Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open Loan Calculator | Version 2.0</title>
 <style>
-* { box-sizing: border-box; }
+:root {
+  --blue:#174ea6;
+  --light:#eef4ff;
+  --dark:#172b4d;
+  --green:#168653;
+  --muted:#64748b;
+  --border:#e2e8f0;
+}
+* {box-sizing:border-box}
 body {
-  margin: 0;
-  padding: 25px;
-  font-family: Arial, sans-serif;
-  background: #f3f6fb;
-  color: #202b3c;
+  margin:0;
+  background:#f4f7fb;
+  color:var(--dark);
+  font-family:Arial,sans-serif;
 }
-.container {
-  max-width: 1050px;
-  margin: auto;
+header {
+  background:#123b70;
+  color:white;
+  padding:28px 20px;
 }
-header { margin-bottom: 25px; }
-header h1 { color: #174a82; margin-bottom: 8px; }
-header p { color: #64748b; }
+.header-inner,.container {
+  max-width:1150px;
+  margin:auto;
+}
+header h1 {margin:0 0 8px;font-size:28px}
+header p {margin:0;color:#dbeafe}
+.version {font-size:12px;color:#bfdbfe;margin-top:10px}
+.container {padding:25px 16px}
 .card {
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  box-shadow: 0 3px 15px rgba(0,0,0,.05);
+  background:white;
+  padding:23px;
+  border-radius:12px;
+  margin-bottom:20px;
+  box-shadow:0 3px 14px rgba(15,23,42,.05);
 }
-h2 { font-size: 20px; margin-top: 0; }
+h2 {font-size:19px;margin:0 0 20px}
+h3 {font-size:16px;margin:0 0 14px}
 .inputs {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(210px,1fr));
-  gap: 18px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:18px;
 }
-label { display: block; font-weight: bold; margin-bottom: 8px; }
-input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 7px;
-  font-size: 16px;
+label {
+  display:block;
+  font-weight:bold;
+  font-size:13px;
+  margin-bottom:8px;
 }
+input,select {
+  width:100%;
+  padding:12px;
+  border:1px solid #cbd5e1;
+  border-radius:7px;
+  font-size:15px;
+}
+input:focus,select:focus {
+  outline:2px solid #bfdbfe;
+  border-color:var(--blue);
+}
+.hint {font-size:12px;color:var(--muted);margin-top:6px}
 button {
-  background: #1764aa;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 7px;
-  cursor: pointer;
-  font-size: 15px;
-  margin-top: 18px;
+  border:0;
+  border-radius:7px;
+  padding:12px 18px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:14px;
 }
-button:hover { background: #104b82; }
-.results {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(190px,1fr));
-  gap: 15px;
+.primary {background:var(--blue);color:white}
+.secondary {background:#e8effb;color:var(--blue)}
+.actions {display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.metrics {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:14px;
 }
-.result {
-  background: #edf5ff;
-  padding: 18px;
-  border-radius: 9px;
+.metric {
+  background:var(--light);
+  border-radius:9px;
+  padding:17px;
+  min-width:0;
 }
-.result span { color: #52657c; font-size: 13px; }
-.result strong {
-  display: block;
-  font-size: 21px;
-  margin-top: 10px;
-  color: #174a82;
-  overflow-wrap: anywhere;
+.metric span {font-size:12px;color:var(--muted)}
+.metric strong {
+  display:block;
+  font-size:21px;
+  color:var(--blue);
+  margin-top:9px;
+  overflow-wrap:anywhere;
 }
+.metric.green {background:#eaf8f0}
+.metric.green strong {color:var(--green)}
 .comparison {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
-  gap: 15px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
 }
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
+.comparison .metric {background:#f8fafc}
+table {width:100%;border-collapse:collapse;font-size:13px}
 th,td {
-  padding: 11px;
-  text-align: right;
-  border-bottom: 1px solid #e2e8f0;
+  padding:11px 9px;
+  border-bottom:1px solid var(--border);
+  text-align:right;
+  white-space:nowrap;
 }
-th:first-child,td:first-child { text-align: left; }
-th { background: #edf5ff; }
-.table-wrap { overflow-x: auto; }
-.note { color: #64748b; font-size: 13px; }
+th {background:#edf3fc;color:#334155}
+th:first-child,td:first-child {text-align:left}
+.table-wrap {overflow-x:auto}
+.note {font-size:12px;color:var(--muted);line-height:1.6}
+.error {color:#b91c1c;font-size:13px;margin-top:12px}
+footer {text-align:center;padding:20px;color:var(--muted);font-size:12px}
 @media(max-width:600px) {
-  body { padding: 12px; }
-  .card { padding: 17px; }
+  header h1 {font-size:23px}
+  .card {padding:17px}
+  .metric strong {font-size:18px}
+}
+@media print {
+  body {background:white}
+  header {background:white;color:black;padding:10px}
+  header p,.version {color:#333}
+  .no-print,button {display:none!important}
+  .card {box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+  .container {max-width:100%;padding:5px}
+  .table-wrap {overflow:visible}
+  table {font-size:9px}
+  th,td {padding:5px}
 }
 </style>
 </head>
 <body>
-<div class="container">
 
 <header>
+<div class="header-inner">
 <h1>Open Loan Calculator</h1>
-<p>Calculate EMI, compare interest methods and understand your repayment schedule.</p>
+<p>Calculate EMI, compare loan costs and plan your prepayments.</p>
+<div class="version">VERSION 2.0 | OPEN-SOURCE FINANCIAL TOOL</div>
+</div>
 </header>
 
-<div class="card">
-<h2>Loan Details</h2>
+<main class="container">
+
+<section class="card">
+<h2>1. Loan Details</h2>
 <div class="inputs">
-  <div>
-    <label for="principal">Loan Amount (₹)</label>
-    <input id="principal" type="number" value="200000" min="1">
-  </div>
-  <div>
-    <label for="rate">Annual Interest Rate (%)</label>
-    <input id="rate" type="number" value="12" min="0" step="0.01">
-  </div>
-  <div>
-    <label for="months">Loan Tenure (Months)</label>
-    <input id="months" type="number" value="36" min="1" max="600">
-  </div>
+<div>
+<label for="amount">Loan Amount (₹)</label>
+<input id="amount" type="number" min="1" value="200000">
 </div>
-<button onclick="calculate()">Calculate Loan</button>
-<p id="error" style="color:red"></p>
+<div>
+<label for="rate">Annual Interest Rate (%)</label>
+<input id="rate" type="number" min="0" step="0.01" value="12">
 </div>
+<div>
+<label for="tenure">Loan Tenure (Months)</label>
+<input id="tenure" type="number" min="1" max="600" value="36">
+</div>
+<div>
+<label for="monthlyExtra">Monthly Additional Payment (₹)</label>
+<input id="monthlyExtra" type="number" min="0" value="0">
+<div class="hint">Extra amount paid every month.</div>
+</div>
+<div>
+<label for="lumpSum">One-time Prepayment (₹)</label>
+<input id="lumpSum" type="number" min="0" value="0">
+<div class="hint">Paid immediately after the first EMI.</div>
+</div>
+</div>
+<div class="actions no-print">
+<button class="primary" onclick="calculate()">Calculate Loan</button>
+<button class="secondary" onclick="resetForm()">Reset</button>
+</div>
+<div id="error" class="error" role="alert"></div>
+</section>
 
-<div class="card">
-<h2>Reducing Balance Loan Results</h2>
-<div class="results">
-  <div class="result">
-    <span>Monthly EMI</span>
-    <strong id="emi">₹0</strong>
-  </div>
-  <div class="result">
-    <span>Total Interest</span>
-    <strong id="interest">₹0</strong>
-  </div>
-  <div class="result">
-    <span>Total Repayment</span>
-    <strong id="repayment">₹0</strong>
-  </div>
+<section class="card">
+<h2>2. Original Loan Summary</h2>
+<div class="metrics">
+<div class="metric">
+<span>Monthly EMI</span>
+<strong id="emi">—</strong>
+</div>
+<div class="metric">
+<span>Total Interest</span>
+<strong id="baseInterest">—</strong>
+</div>
+<div class="metric">
+<span>Total Repayment</span>
+<strong id="baseTotal">—</strong>
+</div>
+<div class="metric">
+<span>Original Tenure</span>
+<strong id="baseTenure">—</strong>
 </div>
 </div>
+</section>
 
-<div class="card">
-<h2>Flat vs Reducing Interest Comparison</h2>
+<section class="card">
+<h2>3. Prepayment Impact</h2>
+<div class="metrics">
+<div class="metric green">
+<span>Revised Loan Tenure</span>
+<strong id="newTenure">—</strong>
+</div>
+<div class="metric green">
+<span>Interest After Prepayment</span>
+<strong id="newInterest">—</strong>
+</div>
+<div class="metric green">
+<span>Interest Saved</span>
+<strong id="savedInterest">—</strong>
+</div>
+<div class="metric green">
+<span>Revised Total Outflow</span>
+<strong id="newTotal">—</strong>
+</div>
+</div>
+<p class="note">Prepayments are assumed to reduce outstanding principal immediately after the first regular EMI. The regular EMI remains unchanged, shortening the tenure. This is an illustrative monthly model.</p>
+</section>
+
+<section class="card">
+<h2>4. Flat vs Reducing Interest Comparison</h2>
 <div class="comparison">
-  <div class="result">
-    <span>Flat Interest – Monthly Instalment</span>
-    <strong id="flatEMI">₹0</strong>
-  </div>
-  <div class="result">
-    <span>Flat Interest – Total Interest</span>
-    <strong id="flatInterest">₹0</strong>
-  </div>
-  <div class="result">
-    <span>Flat Interest – Total Repayment</span>
-    <strong id="flatRepayment">₹0</strong>
-  </div>
+<div class="metric">
+<span>Flat Interest Amount</span>
+<strong id="flatInterest">—</strong>
 </div>
-<p class="note">Flat and reducing rates are calculated using the same stated annual rate. They are different interest methods and are not equivalent-cost loans.</p>
+<div class="metric">
+<span>Flat Monthly Instalment</span>
+<strong id="flatEMI">—</strong>
 </div>
+<div class="metric">
+<span>Flat Total Repayment</span>
+<strong id="flatTotal">—</strong>
+</div>
+</div>
+<p class="note">Both methods use the same stated annual rate for illustration. They do not represent equivalent effective borrowing costs.</p>
+</section>
 
-<div class="card">
-<h2>Month-wise Repayment Schedule</h2>
+<section class="card">
+<h2>5. Revised Repayment Schedule</h2>
 <div class="table-wrap">
 <table>
 <thead>
@@ -170,119 +253,192 @@ th { background: #edf5ff; }
 <th>Month</th>
 <th>Opening Balance</th>
 <th>EMI</th>
-<th>Principal</th>
+<th>Extra Payment</th>
 <th>Interest</th>
+<th>Principal</th>
 <th>Closing Balance</th>
 </tr>
 </thead>
-<tbody id="schedule"></tbody>
+<tbody id="schedule">
+<tr><td colspan="7">Calculate a loan to see the schedule.</td></tr>
+</tbody>
 </table>
 </div>
-<button onclick="downloadCSV()">Download Schedule (CSV)</button>
+<div class="actions no-print">
+<button class="secondary" onclick="downloadCSV()">Download CSV</button>
+<button class="primary" onclick="window.print()">Print / Save as PDF</button>
 </div>
+</section>
 
-<p class="note">Disclaimer: This calculator provides illustrative estimates. Actual lender calculations may differ due to fees, taxes, payment dates, rounding and other loan conditions.</p>
+<p class="note">Disclaimer: Educational and informational estimates only. Actual lender calculations may differ due to fees, taxes, payment dates, rounding, prepayment restrictions and contractual terms. This model does not calculate foreclosure charges or lender-specific penalties.</p>
 
-</div>
+</main>
+
+<footer>Open Loan Calculator | Open-source project | Version 2.0</footer>
 
 <script>
-let currentSchedule = [];
+let scheduleData = [];
 
-const money = value =>
-  "₹" + value.toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
+const money = value => "₹" + value.toLocaleString("en-IN", {
+ minimumFractionDigits:2,
+ maximumFractionDigits:2
+});
+
+function baseEMI(P,r,n) {
+ if(r===0) return P/n;
+ return P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+}
+
+function simulate(P,r,emi,monthlyExtra,lumpSum,maxMonths) {
+ let balance=P;
+ let totalInterest=0;
+ let totalPaid=0;
+ let rows=[];
+ let month=0;
+
+ while(balance>0.005 && month<maxMonths) {
+   month++;
+   const opening=balance;
+   const interest=opening*r;
+   let regular=Math.min(emi,opening+interest);
+   let principal=regular-interest;
+   balance=Math.max(0,balance-principal);
+
+   let extra=0;
+
+   // Lump sum is paid after the first regular EMI.
+   if(month===1 && lumpSum>0) {
+     extra=Math.min(lumpSum,balance);
+     balance-=extra;
+   }
+
+   // Monthly extra payment is made after regular EMI.
+   extra+=Math.min(monthlyExtra,balance);
+   balance=Math.max(0,balance-Math.min(monthlyExtra,balance));
+
+   totalInterest+=interest;
+   totalPaid+=regular+extra;
+
+   rows.push({
+     month,opening,emi:regular,extra,
+     interest,principal:opening-balance,
+     closing:balance
+   });
+ }
+
+ return {rows,totalInterest,totalPaid,months:month,balance};
+}
 
 function calculate() {
-  const P = Number(document.getElementById("principal").value);
-  const annualRate = Number(document.getElementById("rate").value);
-  const n = Number(document.getElementById("months").value);
-  const error = document.getElementById("error");
+ const P=Number(document.getElementById("amount").value);
+ const annualRate=Number(document.getElementById("rate").value);
+ const n=Number(document.getElementById("tenure").value);
+ const extra=Number(document.getElementById("monthlyExtra").value);
+ const lump=Number(document.getElementById("lumpSum").value);
+ const error=document.getElementById("error");
 
-  error.textContent = "";
+ error.textContent="";
+ scheduleData=[];
 
-  if (!Number.isFinite(P) || P <= 0 ||
-      !Number.isFinite(annualRate) || annualRate < 0 ||
-      !Number.isInteger(n) || n < 1 || n > 600) {
-    error.textContent = "Please enter a valid loan amount, interest rate and tenure (1–600 months).";
-    return;
-  }
+ if(!Number.isFinite(P)||P<=0 ||
+    !Number.isFinite(annualRate)||annualRate<0 ||
+    !Number.isInteger(n)||n<1||n>600 ||
+    !Number.isFinite(extra)||extra<0 ||
+    !Number.isFinite(lump)||lump<0) {
+   error.textContent="Enter valid loan details. Tenure must be between 1 and 600 months.";
+   return;
+ }
 
-  const r = annualRate / 1200;
-  const emi = r === 0
-    ? P / n
-    : P * r * Math.pow(1+r,n) / (Math.pow(1+r,n)-1);
+ if(lump>=P) {
+   error.textContent="One-time prepayment must be less than the original loan amount.";
+   return;
+ }
 
-  const totalPayment = emi * n;
-  const totalInterest = totalPayment - P;
+ const r=annualRate/1200;
+ const emi=baseEMI(P,r,n);
 
-  const flatInterest = P * (annualRate / 100) * (n / 12);
-  const flatRepayment = P + flatInterest;
+ const base=simulate(P,r,emi,0,0,n+1);
+ const revised=simulate(P,r,emi,extra,lump,600);
 
-  document.getElementById("emi").textContent = money(emi);
-  document.getElementById("interest").textContent = money(totalInterest);
-  document.getElementById("repayment").textContent = money(totalPayment);
+ if(revised.balance>0.005) {
+   error.textContent="The loan could not be fully repaid within 600 months. Increase the monthly payment or revise the inputs.";
+   return;
+ }
 
-  document.getElementById("flatEMI").textContent = money(flatRepayment/n);
-  document.getElementById("flatInterest").textContent = money(flatInterest);
-  document.getElementById("flatRepayment").textContent = money(flatRepayment);
+ const flatInterest=P*(annualRate/100)*(n/12);
+ const flatTotal=P+flatInterest;
 
-  let balance = P;
-  currentSchedule = [];
-  const tbody = document.getElementById("schedule");
-  tbody.innerHTML = "";
+ document.getElementById("emi").textContent=money(emi);
+ document.getElementById("baseInterest").textContent=money(base.totalInterest);
+ document.getElementById("baseTotal").textContent=money(base.totalPaid);
+ document.getElementById("baseTenure").textContent=n+" months";
 
-  for (let month=1; month<=n; month++) {
-    const opening = balance;
-    const interest = opening * r;
-    let principal = emi - interest;
+ document.getElementById("newTenure").textContent=revised.months+" months";
+ document.getElementById("newInterest").textContent=money(revised.totalInterest);
+ document.getElementById("savedInterest").textContent=money(Math.max(0,base.totalInterest-revised.totalInterest));
+ document.getElementById("newTotal").textContent=money(revised.totalPaid);
 
-    if (month === n || principal > balance) {
-      principal = balance;
-    }
+ document.getElementById("flatInterest").textContent=money(flatInterest);
+ document.getElementById("flatEMI").textContent=money(flatTotal/n);
+ document.getElementById("flatTotal").textContent=money(flatTotal);
 
-    const payment = principal + interest;
-    balance = Math.max(0, balance-principal);
+ scheduleData=revised.rows;
 
-    const row = [
-      month, opening, payment, principal, interest, balance
-    ];
-    currentSchedule.push(row);
+ const tbody=document.getElementById("schedule");
+ tbody.replaceChildren();
 
-    const tr = document.createElement("tr");
-    row.forEach((value,index) => {
-      const td = document.createElement("td");
-      td.textContent = index === 0 ? value : money(value);
-      tr.appendChild(td);
-    });
-    tbody.appendChild(tr);
-  }
+ revised.rows.forEach(row=>{
+   const tr=document.createElement("tr");
+   const values=[
+     row.month,row.opening,row.emi,row.extra,
+     row.interest,row.principal,row.closing
+   ];
+   values.forEach((value,index)=>{
+     const td=document.createElement("td");
+     td.textContent=index===0?value:money(value);
+     tr.appendChild(td);
+   });
+   tbody.appendChild(tr);
+ });
 }
 
 function downloadCSV() {
-  if (!currentSchedule.length) {
-    alert("Please calculate the loan first.");
-    return;
-  }
+ if(!scheduleData.length) {
+   alert("Please calculate the loan first.");
+   return;
+ }
 
-  const rows = [
-    ["Month","Opening Balance","EMI","Principal","Interest","Closing Balance"],
-    ...currentSchedule
-  ];
+ const headers=[
+  "Month","Opening Balance","Regular EMI",
+  "Extra Payment","Interest","Principal","Closing Balance"
+ ];
 
-  const csv = rows.map(row => row.join(",")).join("\n");
-  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "loan-repayment-schedule.csv";
-  link.click();
-  URL.revokeObjectURL(url);
+ const rows=[headers,...scheduleData.map(row=>[
+   row.month,row.opening.toFixed(2),row.emi.toFixed(2),
+   row.extra.toFixed(2),row.interest.toFixed(2),
+   row.principal.toFixed(2),row.closing.toFixed(2)
+ ])];
+
+ const csv=rows.map(row=>row.join(",")).join("\r\n");
+ const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+ const url=URL.createObjectURL(blob);
+ const link=document.createElement("a");
+ link.href=url;
+ link.download="open-loan-calculator-schedule.csv";
+ link.click();
+ URL.revokeObjectURL(url);
+}
+
+function resetForm() {
+ document.getElementById("amount").value=200000;
+ document.getElementById("rate").value=12;
+ document.getElementById("tenure").value=36;
+ document.getElementById("monthlyExtra").value=0;
+ document.getElementById("lumpSum").value=0;
+ calculate();
 }
 
 calculate();
 </script>
 </body>
 </html>
-
